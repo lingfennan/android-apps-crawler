@@ -1,0 +1,7 @@
+Mac OS:
+pip install scrapy is broken.
+I used port install py27-scrapy to install scrapy.
+I renamed the /opt/local/bin/scrapy-2.7 to /opt/local/bin/scrapy.
+
+Ubuntu:
+pip install scrapy works
