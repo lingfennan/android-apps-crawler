@@ -59,8 +59,9 @@ START_URLS = {
 }
 SCRAPE_RULES = {
     "xpath" : {
-        "appchina"     : "//a[@class='download-pc fl']/@href",
-        "hiapk"        : "//a[@class='linkbtn d1']/@href",
+        "appchina"     : "//a[@class='download_app']/@href",
+         #"//div[@class='download-button direct_download']/a/@href", # "//a[@class='download_app']/@href",
+        "hiapk"        : "//a[@class='link_btn']/@href",
         "android.d.cn" : "//a[@class='localDownload']/@href",
         "mumayi"       : "//a[@class='download fl']/@href",
         "gfan"         : "//a[@id='computerLoad']/@href",
