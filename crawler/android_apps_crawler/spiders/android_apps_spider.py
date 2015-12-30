@@ -56,7 +56,12 @@ class AndroidAppsSpider(Spider):
         #else:
         #    pass
         sel = Selector(response)
+        #current_url = response.url
+        #print current_url
         for url in sel.xpath('//a/@href').extract():
+            if 'javascript' in url:
+                # No URL in href if it refers to Javascript.
+                continue
             url = urljoin(response.url, url)
             yield Request(url, meta=cookie, callback=self.parse)
 

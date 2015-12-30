@@ -59,8 +59,7 @@ START_URLS = {
 }
 SCRAPE_RULES = {
     "xpath" : {
-        "appchina"     : "//a[@class='download_app']/@href",
-         #"//div[@class='download-button direct_download']/a/@href", # "//a[@class='download_app']/@href",
+        "appchina"     : "//a[@class='download_app ']/@href",
         "hiapk"        : "//a[@class='link_btn']/@href",
         "android.d.cn" : "//a[@class='localDownload']/@href",
         "mumayi"       : "//a[@class='download fl']/@href",
@@ -76,6 +75,7 @@ SCRAPE_RULES = {
     },
     "custom_parser" : {
         "anzhi" : "parse_anzhi",
+        "android.d.cn" : "parse_dcn",
     },
 }
 DATABASE_DIR = "../repo/databases/"
