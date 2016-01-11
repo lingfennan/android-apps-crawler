@@ -143,11 +143,14 @@ def get_undownloaded_url(database_filepath):
 
 def fill_work_queue(work_queue, undownloaded_urls):
     for u in undownloaded_urls:
+        if isinstance(u, unicode):
+            u = u.encode('utf-8')
         work_queue.put(u)
 
 def import_work(work_queue, database_filepath):
     undownloaded_urls = get_undownloaded_url(database_filepath)
     fill_work_queue(work_queue, undownloaded_urls)
+    print("number of undownloaded urls: %d" % len(undownloaded_urls))
     return len(undownloaded_urls)
 
 class Watcher:
