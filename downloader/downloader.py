@@ -100,7 +100,7 @@ class Downloader(threading.Thread):
             connection = sqlite3.connect(self.database_filepath)
             cursor = connection.cursor()
             cursor.execute('update apps set downloaded = ? where url = ?',
-                    (result, self.url,))
+                    (result, self.url.decode('utf-8'),))
             connection.commit()
         except sqlite3.OperationalError:
             print("%s: Operational Error" % (self.getName()))
