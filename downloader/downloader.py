@@ -42,7 +42,7 @@ class Downloader(threading.Thread):
         while not self.exit_event.isSet():
             work_queue_lock.acquire()
             if not self.work_queue.empty():
-                self.url = self.work_queue.get()
+                self.id, self.url = self.work_queue.get()
                 work_queue_lock.release()
                 try:
                     self.download()
@@ -99,8 +99,9 @@ class Downloader(threading.Thread):
         try:
             connection = sqlite3.connect(self.database_filepath)
             cursor = connection.cursor()
-            cursor.execute('update apps set downloaded = ? where url = ?',
-                    (result, self.url.decode('utf-8'),))
+            # TODO: currently use id to update, in order to avoid string encoding problems.
+            cursor.execute('update apps set downloaded = ? where id = ?',
+                    (result, self.id,))
             connection.commit()
         except sqlite3.OperationalError:
             print("%s: Operational Error" % (self.getName()))
@@ -126,29 +127,37 @@ class Monitor(threading.Thread):
             print("")
             time.sleep(1)
 
-def get_undownloaded_url(database_filepath):
+def get_download_url(database_filepath, downloaded = 0):
+    """Get download url and their ids. Return ids, because the string has lots of encoding problems. Use id as a
+    circumvent approach.
+
+    :param database_filepath: the path to the database file.
+    :param downloaded: the status of downloaded, -1 means error, 0 mean undownloaded, 1 mean downloaded.
+    :return: list of urls and their ids, matching the specified download status.
+    """
     undownloaded_urls = []
     try:
         connection = sqlite3.connect(database_filepath)
         cursor = connection.cursor()
-        sql = "select * from apps where downloaded = 0"
+        sql = "select * from apps where downloaded = %d" % downloaded
         cursor.execute(sql)
         records = cursor.fetchall()
-        undownloaded_urls = [r[1] for r in records]
+        undownloaded_urls = [(r[0], r[1]) for r in records]
     except sqlite3.OperationalError:
-        print("get_undownloaded_url(): Operational Error.")
+        print("get_download_url(): Operational Error.")
     finally:
         connection.close()
     return undownloaded_urls
 
 def fill_work_queue(work_queue, undownloaded_urls):
     for u in undownloaded_urls:
-        if isinstance(u, unicode):
-            u = u.encode('utf-8')
-        work_queue.put(u)
+        id, url = u
+        if isinstance(url, unicode):
+            url = url.encode('utf-8')
+        work_queue.put((id, url))
 
 def import_work(work_queue, database_filepath):
-    undownloaded_urls = get_undownloaded_url(database_filepath)
+    undownloaded_urls = get_download_url(database_filepath)
     fill_work_queue(work_queue, undownloaded_urls)
     print("number of undownloaded urls: %d" % len(undownloaded_urls))
     return len(undownloaded_urls)
