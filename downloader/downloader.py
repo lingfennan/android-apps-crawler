@@ -120,7 +120,7 @@ class Monitor(threading.Thread):
         threading.Thread.__init__(self)
         self.threads = threads
         self.exit_event = threading.Event()
-        self.status_queue = Queue.Queue(maxsize=5)
+        self.status_queue = Queue.Queue(maxsize=30)
         self.freeze_exit = False
     def exit(self):
         self.exit_event.set()
@@ -148,11 +148,9 @@ class Monitor(threading.Thread):
                 if not self.isAlive():
                     print("Monitor found the process is freezed!")
                     self.exitFreeze()
-
             time.sleep(1)
     def isAlive(self):
         # If the status doesn't change for maxsize * sleep_interval, the program is considered not alive.
-        return False
         if self.status_queue.empty():
             return True
         first = self.status_queue.queue[0]
