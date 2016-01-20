@@ -55,7 +55,8 @@ class AndroidAppsSpider(Spider):
         #    appItemList.extend(self.parse_anzhi(response, xpath))
         #else:
         #    pass
-        sel = Selector(response)
+
+        sel = Selector(response) 
         #current_url = response.url
         #print current_url
         for url in sel.xpath('//a/@href').extract():

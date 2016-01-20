@@ -9,6 +9,8 @@ import os
 import hashlib
 import signal
 import Queue
+import socket
+import errno
 
 NUM_THREAD = 20
 work_queue_lock = threading.Lock()
@@ -50,6 +52,10 @@ class Downloader(threading.Thread):
                     self.update_database()
                 except urllib2.HTTPError:
                     self.update_database(-1)
+                except socket.error as e:
+                    if e.errno == errno.ECONNRESET:
+                        # self.update_database(-1)
+                        print("Connection reset")
             else:
                 work_queue_lock.release()
         print("%s: received exit event." % self.getName())

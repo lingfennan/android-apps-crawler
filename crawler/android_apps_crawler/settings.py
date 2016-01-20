@@ -40,6 +40,7 @@ ALLOWED_DOMAINS = {
     "7723.com"     : ["7723.com",],
     "777ccc.com"   : ["777ccc.com",],
     "anruan.com"   : ["anruan.com",],
+    "wandoujia.com": ["wandoujia.com",],
 }
 START_URLS = {
     "appchina.com" : ["http://www.appchina.com",],
@@ -56,6 +57,7 @@ START_URLS = {
     "7723.com"     : ["http://www.7723.com",],
     "777ccc.com"   : ["http://www.777ccc.com",],
     "anruan.com"   : ["http://www.anruan.com",],
+    "wandoujia.com": ["http://www.wandoujia.com/apps",],
 }
 SCRAPE_RULES = {
     "xpath" : {
@@ -72,6 +74,7 @@ SCRAPE_RULES = {
         "7723"         : "//ul[@class='download_list']/li/h5/a/@href",
         "777ccc"       : "//a[@class='downtopc']/@href",
         "anruan"       : "//a[@class='ldownload']/@href",
+        "wandoujia"    : "//a[@class='install-btn '/@href",
     },
     "custom_parser" : {
         "anzhi" : "parse_anzhi",
