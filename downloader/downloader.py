@@ -114,18 +114,46 @@ class Monitor(threading.Thread):
         threading.Thread.__init__(self)
         self.threads = threads
         self.exit_event = threading.Event()
+        self.status_queue = Queue.Queue(maxsize=5)
+        self.freeze_exit = False
     def exit(self):
         self.exit_event.set()
         self.join()
+    def exitFreeze(self):
+        # Exit because of thread freeze
+        self.freeze_exit = True
+        for t in self.threads:
+            t.exit()
+        self.exit()
     def run(self):
         while not self.exit_event.isSet():
+            report_str = ""
             for t in self.threads:
-                if t.report() == 0:
-                    print(" new"),
+                report_value = t.report()
+                if report_value == 0:
+                    report_str += (" new")
                 else:
-                    print("%3.0f%%" % (t.report()*100)),
-            print("")
+                    report_str += ("%3.0f%%" % (report_value*100))
+            print(report_str)
+            # Maintain a queue of past status, if the status shows that the program freezes, then terminate and restart.
+            self.status_queue.put(report_str)
+            if self.status_queue.full():
+                self.status_queue.get()
+                if not self.isAlive():
+                    print("Monitor found the process is freezed!")
+                    self.exitFreeze()
+
             time.sleep(1)
+    def isAlive(self):
+        # If the status doesn't change for maxsize * sleep_interval, the program is considered not alive.
+        return False
+        if self.status_queue.empty():
+            return True
+        first = self.status_queue.queue[0]
+        for i in range(1, self.status_queue.qsize()):
+            if first != self.status_queue.queue[i]:
+                return True
+        return False
 
 def get_download_url(database_filepath, downloaded = 0):
     """Get download url and their ids. Return ids, because the string has lots of encoding problems. Use id as a
@@ -240,9 +268,13 @@ def main():
             exit_flag = 0
         while not work_queue.empty():
             time.sleep(10)
+            if monitor_thread.freeze_exit:
+                # If program exits due to freeze, restart main()
+                return "restart"
     for t in threads:
         t.exit()
     monitor_thread.exit()
 
 if __name__ == '__main__':
-    main()
+    while main() == "restart":
+        print("**************************main() returned due to freeze_exit! Restarting!***************************")
