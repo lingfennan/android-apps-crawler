@@ -41,6 +41,7 @@ ALLOWED_DOMAINS = {
     "777ccc.com"   : ["777ccc.com",],
     "anruan.com"   : ["anruan.com",],
     "wandoujia.com": ["wandoujia.com",],
+    "coolapk.com"  : ["coolapk.com",],
 }
 START_URLS = {
     "appchina.com" : ["http://www.appchina.com",],
@@ -58,6 +59,7 @@ START_URLS = {
     "777ccc.com"   : ["http://www.777ccc.com",],
     "anruan.com"   : ["http://www.anruan.com",],
     "wandoujia.com": ["http://www.wandoujia.com/apps",],
+    "coolapk.com"  : ["http://m.coolapk.com/apk/",],
 }
 SCRAPE_RULES = {
     "xpath" : {
@@ -77,8 +79,9 @@ SCRAPE_RULES = {
         "wandoujia"    : "//a[@class='install-btn '/@href",
     },
     "custom_parser" : {
-        "anzhi" : "parse_anzhi",
+        "anzhi"        : "parse_anzhi",
         "android.d.cn" : "parse_dcn",
+        "coolapk"      : "parse_coolapk",
     },
 }
 DATABASE_DIR = "../repo/databases/"

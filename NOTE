@@ -1,1 +1,2 @@
 android.d.cn uses dpk as output format. Skip it for now.
+coolapk.com uses request data hash to protect their data, the scrape then download mode doesn't work. Skip it for now. Maybe combination of the two will work.

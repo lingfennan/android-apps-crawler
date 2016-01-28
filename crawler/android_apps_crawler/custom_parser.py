@@ -35,3 +35,15 @@ def parse_dcn(response):
         appItem['url'] = url
         appItemList.append(appItem)
     return appItemList
+
+def parse_coolapk(response):
+    xpath = "//script/text()"
+    sel = Selector(response)
+    apkDownloadUrl = sel.xpath(xpath).re(r'apkDownloadUrl = "([^\"]+)"')
+    appItemList = []
+    for apkUrl in apkDownloadUrl:
+        url = "http://m.coolapk.com%s" % apkUrl
+        appItem = AppItem()
+        appItem['url'] = url
+        appItemList.append(appItem)
+    return appItemList

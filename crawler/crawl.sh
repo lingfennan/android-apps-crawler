@@ -15,6 +15,7 @@ then
     echo "       appfun.cn"
     echo "       jimi168.com"
     echo "       wandoujia.com"
+    echo "       coolapk.com"
     echo "   database output directory:"
     echo "       default: ../repo/databases/"
     exit 2
