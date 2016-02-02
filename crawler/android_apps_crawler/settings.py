@@ -42,6 +42,7 @@ ALLOWED_DOMAINS = {
     "anruan.com"   : ["anruan.com",],
     "wandoujia.com": ["wandoujia.com",],
     "coolapk.com"  : ["coolapk.com",],
+    "baidu.com"    : ["baidu.com",],
 }
 START_URLS = {
     "appchina.com" : ["http://www.appchina.com",],
@@ -60,6 +61,7 @@ START_URLS = {
     "anruan.com"   : ["http://www.anruan.com",],
     "wandoujia.com": ["http://www.wandoujia.com/apps",],
     "coolapk.com"  : ["http://m.coolapk.com/apk/",],
+    "baidu.com"    : ["http://shouji.baidu.com/?from=landing",],
 }
 SCRAPE_RULES = {
     "xpath" : {
@@ -77,6 +79,7 @@ SCRAPE_RULES = {
         "777ccc"       : "//a[@class='downtopc']/@href",
         "anruan"       : "//a[@class='ldownload']/@href",
         "wandoujia"    : "//a[@class='install-btn '/@href",
+        "baidu"        : "//div[@class='area-download']/a[@class='apk']/@href",
     },
     "custom_parser" : {
         "anzhi"        : "parse_anzhi",
